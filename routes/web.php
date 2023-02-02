@@ -23,3 +23,14 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 Route::resource('products', \App\Http\Controllers\ProductsController::class)->only(['index', 'show']);
 Route::resource('categories', \App\Http\Controllers\CategoriesController::class)->only(['index', 'show']);
+
+// localhost/admin/....
+// route('admin. ....')
+Route::name('admin.')->prefix('admin')->middleware(['role:admin|editor'])->group(function() {
+    Route::get('dashboard', \App\Http\Controllers\Admin\DashboardController::class)->name('dashboard');
+
+
+    Route::resource('products', \App\Http\Controllers\Admin\ProductsController::class)->except(['show']);
+    Route::resource('categories', \App\Http\Controllers\Admin\CategoriesController::class)->except(['show']);
+
+});
