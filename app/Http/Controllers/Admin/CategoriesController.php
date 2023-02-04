@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CreateCategory;
+use App\Http\Requests\Admin\UpdateCategory;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -15,7 +17,8 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $categories = Category::withCount('products')->paginate(10);
+        $categories = Category::with('parent:id,name')->withCount('products')->orderByDesc('id')->paginate(10);
+        // $categories = Category::withCount('products')->paginate(10);
         return view ('admin/categories/index', compact('categories'));
     }
 
@@ -26,7 +29,8 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        //
+//        dd(config('permission.access.categories.publish'));
+        return view('admin/categories/create', ['categories' => Category::all()]);
     }
 
     /**
@@ -35,9 +39,11 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateCategory $request)
     {
-        //
+        Category::create($request->validated());
+
+        return redirect()->route('admin.categories.index');
     }
 
     /**
@@ -46,9 +52,12 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
+        $this->middleware('permission:' . config('permission.access.categories.edit'));
+
+        return view('admin/categories/edit', ['categories' => Category::all(), 'category' => $category]);
+        //dd($category);
     }
 
     /**
@@ -58,9 +67,11 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCategory $request, Category $category)
     {
-        //
+        $category->updateOrFail($request->validated());
+        // dd($request->validated(), $category);
+        return redirect()->route('admin.categories.edit', $category);
     }
 
     /**
@@ -69,8 +80,11 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        $this->middleware('permission:' . config('permission.access.categories.delete'));
+        // dd($category);
+        $category->deleteOrFail();
+        return redirect()->route('admin.categories.index');
     }
 }

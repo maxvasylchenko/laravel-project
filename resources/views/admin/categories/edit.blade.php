@@ -12,6 +12,31 @@
                             @csrf
                             @method('PUT')
 
+
+                            @if ($categories)
+                                <div class="row mb-3">
+                                    <label for="parent"
+                                           class="col-md-4 col-form-label text-md-end">{{ __('Parent Category') }}</label>
+
+                                    <div class="col-md-6">
+                                        <select name="parent_id" id="parent" class="form-control @error('parent_id') is-invalid @enderror">
+                                            <option value=""></option>
+                                            @foreach($categories as $pCategory)
+                                                <option value="{{$pCategory->id}}"
+                                                        @if($pCategory->id === $category->parent_id) selected @endif
+                                                >{{$pCategory->name}}</option>
+                                            @endforeach
+                                        </select>
+
+                                        @error('parent_id')
+                                        <span class="invalid-feedback" role="alert">
+                                             <strong>{{ $message }}</strong>
+                                         </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            @endif
+
                             <div class="row mb-3">
                                 <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
 
