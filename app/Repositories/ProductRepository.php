@@ -4,10 +4,16 @@ namespace App\Repositories;
 
 use App\Http\Requests\Admin\CreateProductRequest;
 use App\Models\Product;
+use App\Repositories\Contracts\ImageRepositoryContract;
 use App\Repositories\Contracts\ProductRepositoryContract;
 
 class ProductRepository implements ProductRepositoryContract
 {
+
+    public function __construct(protected ImageRepositoryContract $imagesRepository)
+    {
+
+    }
 
     public function create(CreateProductRequest $request): Product|bool
     {
@@ -15,11 +21,21 @@ class ProductRepository implements ProductRepositoryContract
             \DB::beginTransaction();
 
             $data = collect($request->validated())->except(['categories'])->toArray();
-//            dd($data);
+//            $images = $data['images'] ?? '';
+//            dd($images);
+////            dd($data);
             $categories = $request->get('categories', []);
-//            dd($data, $categories);
+////            dd($data, $categories);
             $product = Product::create($data);
+//            $product->images()->save($data['images']);
+//            dd('stop');
             $this->setCategories($product, $categories);
+            $this->imagesRepository->attach(
+                $product,
+                'images',
+                    $data['images'] ?? [],
+                $product->slug
+            );
 
             \DB::commit();
 
