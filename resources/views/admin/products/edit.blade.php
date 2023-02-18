@@ -39,10 +39,10 @@
                         <label for="category"
                                class="col-md-4 col-form-label text-md-right">{{ __('Categories') }}</label>
                         <div class="col-md-6">
-                            <label for="categories"></label><select name="categories[]"
-                                                                    id="categories"
-                                                                    class="form-control @error('categories') is-invalid @enderror"
-                                                                    multiple
+                            <select name="categories[]"
+                                    id="categories"
+                                    class="form-control @error('categories') is-invalid @enderror"
+                                    multiple
                             >
                                 @foreach($categories as $category)
                                     <option value="{{ $category['id'] }}"
@@ -138,7 +138,7 @@
                                         @foreach($product->images as $image)
                                             @if(Storage::has($image->path))
                                                 <div class="col-sm-12 d-flex justify-content-center align-items-center">
-                                                    <img src="{{ $image->url }}" class="card-img-top" style="max-width: 80%; margin: 0 auto; display: block;" alt="">
+                                                    <img src="{{ $image->url }}" class="card-img-top" style="max-width: 80%; margin: 0 auto; display: block;">
                                                     <a data-route="{{ route('ajax.images.delete', $image) }}"
                                                        class="btn btn-danger remove-product-image">x</a>
                                                 </div>
