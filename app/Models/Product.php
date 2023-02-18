@@ -61,4 +61,25 @@ class Product extends Model
             get: fn() => strtolower(str_replace(' ', '_', $this->attributes['title']))
         );
     }
+
+    public function endPrice(): Attribute
+    {
+        return Attribute::get(function () {
+            $price = is_null($this->attributes['discount']) || $this->attributes['discount'] === 0
+                ? $this->attributes['price']
+                : ($this->attributes['price'] - ($this->attributes['price'] * ($this->attributes['discount'] / 100)));
+
+            return $price < 0 ? 1 : round($price, 2); // скорочення до десятичних (10.5232325 -> 10.52)
+        });
+    }
+
+    public function price(): Attribute
+    {
+        return Attribute::get(fn() => round($this->attributes['price'], 2));
+    }
+
+    public function available(): Attribute
+    {
+        return Attribute::get(fn() => $this->attributes['quantity'] > 0);
+    }
 }
