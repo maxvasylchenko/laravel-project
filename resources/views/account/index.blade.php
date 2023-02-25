@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('account.orders.parts.nav')
+    @include('account.parts .nav')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -20,9 +20,8 @@
                                 <table class="table align-self-center">
                                     <thead>
                                     <tr>
-                                        <th class="text-center" scope="col"> Name</th>
-                                        <th class="text-center" scope="col"> Value
-                                        <th>
+                                        <th class="text-center" scope="col"> Name </th>
+                                        <th class="text-center" scope="col"> Value <th>
                                     </tr>
                                     </thead>
                                     <tbody>

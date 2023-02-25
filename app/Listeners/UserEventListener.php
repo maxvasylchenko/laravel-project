@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Listeners;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -10,15 +9,21 @@ use Illuminate\Queue\InteractsWithQueue;
 
 class UserEventListener
 {
+    protected $instances = ['cart', 'wishlist'];
+
     public function handleLogin($event)
     {
-        Cart::instance('cart')->restore($event->user->id);
+        collect($this->instances)->each(function($instance) use ($event) {
+            Cart::instance($instance)->restore($event->user->id);
+        });
     }
 
     public function handleLogout($event)
     {
-        if (Cart::instance('cart')->count() > 0) {
-            Cart::instance('cart')->store($event->user->id);
+        foreach ($this->instances as $instance) {
+            if (Cart::instance($instance)->count() > 0) {
+                Cart::instance($instance)->store($event->user->id);
+            }
         }
     }
 
@@ -28,7 +33,6 @@ class UserEventListener
             Login::class,
             [UserEventListener::class, 'handleLogin']
         );
-
         $events->listen(
             Logout::class,
             [UserEventListener::class, 'handleLogout']
