@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateProductRequest;
-use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryContract;
@@ -21,11 +20,10 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $products = Product::with('categories')->orderByDesc('created_at')->paginate(5);
+        $products = Product::with('categories')->withCount('followers')->sortable()->paginate(5);
 
-        return view ('admin/products/index', compact('products'));
+        return view('admin/products/index', compact('products'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -36,7 +34,6 @@ class ProductsController extends Controller
         $categories = Category::all();
         return view('admin/products/create', compact('categories'));
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -48,30 +45,7 @@ class ProductsController extends Controller
         return $repository->create($request) ?
             redirect()->route('admin.products.index') :
             redirect()->back()->withInput();
-//        \DB::beginTransaction();
-//        dd($repository->create($request));
-//        \DB::beginTransaction();
-//        $data = $request->validated();
-//        $data = array_merge(
-//            $request->validated(),
-//            ['thumbnail' => FileStorageService::upload($request->file('thumbnail'))]
-//        );
-//        dd($data);
-//        $data = $request->validated();
-
-//        $file = FileStorageService::upload($data['thumbnail']);
-//        dd($file);
-//        dd($data);
-//        $data = array_merge($request->validated(), ['thumbnail' => '-']);
-//        $categories = $data['categories'];
-//        unset($data['categories']);
-//        $product = Product::create($data);
-//        \DB::rollBack();
-//        $product->categories()->attach($categories);
-//        dd($data, $product->categories);
-//       dd($request->validated());
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -82,30 +56,19 @@ class ProductsController extends Controller
     {
         $categories = Category::all();
         $productCategories = $product->categories()->get()->pluck('id')->toArray();
-//        dd($productCategories);
         return view('admin/products/edit', compact('product', 'categories', 'productCategories'));
-
     }
-
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(Request $request, $id)
     {
-//        $categories = Category::all();
-//        $productCategories = $product->categories()->get()->pluck('id')->toArray();
-        $product->updateOrFail($request->validated());
-//        $productCategories->updateOrFail($request->validated());
-
-
-        return redirect()->route('admin.products.edit', $product);
-//        return redirect()->route('admin.products.index');
+        //
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -116,7 +79,6 @@ class ProductsController extends Controller
     {
         $product->categories()->detach();
         $product->delete();
-//        dd($product->categories);
         return redirect()->route('admin.products.index');
     }
 }

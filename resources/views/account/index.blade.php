@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('account.orders.parts.nav')
+{{--    @include('account.orders.parts.nav')--}}
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
