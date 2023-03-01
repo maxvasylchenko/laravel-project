@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/sass/app.scss',
                 'resources/js/admin/admin.js',
                 'resources/sass/admin/admin.scss',
+                'resources/js/payments/paypal.js'
             ],
             refresh: true,
         }),
