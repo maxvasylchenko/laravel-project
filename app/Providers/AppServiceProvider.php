@@ -9,6 +9,7 @@ use App\Repositories\ImageRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\ProductRepository;
 use App\Services\Contracts\PaypalServiceContract;
+use App\Services\InvoicesService;
 use App\Services\PaypalService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -19,7 +20,8 @@ class AppServiceProvider extends ServiceProvider
         ProductRepositoryContract::class => ProductRepository::class,
         ImageRepositoryContract::class => ImageRepository::class,
         OrderRepositoryContract::class => OrderRepository::class,
-        PaypalServiceContract::class => PaypalService::class
+        PaypalServiceContract::class => PaypalService::class,
+        InvoicesServiceContract::class => InvoicesService::class
     ];
 
     /**
