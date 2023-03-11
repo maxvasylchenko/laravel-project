@@ -28,12 +28,15 @@ Route::get('/invoice', function() {
 //    $invoice->stream();
     dump($order->total);
     dump($invoice->url());
+//    dump($invoice->filename);
+    dump(Storage::disk('public')->path($invoice->filename));
     dump('finish');
 });
 
 Route::get('/notify', function() {
 //    dump('start');
     logs()->info('start');
+//    dd(route('account.wishlist'));
     $order = \App\Models\Order::all()->last();
     OrderCreated::dispatch($order);
 //    dump('finish');
@@ -75,6 +78,7 @@ Route::name('account.')->prefix('account')->middleware(['role:customer'])->group
         ->name('edit')
         ->middleware('can:view,user');
     Route::get('wishlist', \App\Http\Controllers\Account\WishListController::class)->name('wishlist');
+    Route::get('telegram/callback', \App\Http\Controllers\TelegramCallbackController::class)->name('telegram.callback');
 });
 
 Route::group(['auth'], function() {

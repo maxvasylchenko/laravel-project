@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Notifications\OrderCreatedNotification;
 use App\Repositories\Contracts\ImageRepositoryContract;
 use App\Repositories\Contracts\OrderRepositoryContract;
 use App\Repositories\Contracts\ProductRepositoryContract;
 use App\Repositories\ImageRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\ProductRepository;
+use App\Services\Contracts\InvoicesServiceContract;
 use App\Services\Contracts\PaypalServiceContract;
 use App\Services\InvoicesService;
 use App\Services\PaypalService;

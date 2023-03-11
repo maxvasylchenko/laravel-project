@@ -5,6 +5,7 @@ namespace App\Listeners\Orders;
 use App\Events\OrderCreated;
 use App\Jobs\OrderCreatedJob;
 use App\Notifications\OrderCreatedNotification;
+use App\Services\Contracts\InvoicesServiceContract;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -30,7 +31,9 @@ class CreatedListener
     {
 //        dump(self::class);
         logs()->info(self::class);
-        OrderCreatedJob::dispatch($event->order)->onQueue('emails')->delay(30);
+//        logs()->info(app()->make(InvoicesServiceContract::class)->generate($event->order)->url());
+        OrderCreatedJob::dispatch($event->order)->onQueue('emails'); //->delay(30);
+//        OrderCreatedJob::dispatchSync($event->order); //->onQueue('emails'); //->delay(30);
 //        $event->order->notify(new OrderCreatedNotification());
     }
 }
