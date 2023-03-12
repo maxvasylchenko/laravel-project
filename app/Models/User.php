@@ -75,11 +75,11 @@ class User extends Authenticatable
 
     public function isWishedProduct(Product $product)
     {
-        return (bool)$this->wishes()->find($product);
+        return (bool) $this->wishes()->find($product);
     }
 
     public function fullName(): Attribute
     {
-        return Attribute::get(fn() => ucfirst($this->attributes['name']) . ' ' . ucfirst($this->attributes['surname']));
+        return Attribute::get(fn () => ucfirst($this->attributes['name']).' '.ucfirst($this->attributes['surname']));
     }
 }

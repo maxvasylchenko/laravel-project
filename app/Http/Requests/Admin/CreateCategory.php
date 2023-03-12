@@ -30,9 +30,9 @@ class CreateCategory extends FormRequest
     public function rules()
     {
         return [
-          'name' => ['required', 'string', 'min:2', 'max:50', 'unique:categories'],
-          'description' => ['nullable', 'string'],
-          'parent_id' => ['nullable', 'exists:App\Models\Category,id'],
+            'name' => ['required', 'string', 'min:2', 'max:50', 'unique:categories'],
+            'description' => ['nullable', 'string'],
+            'parent_id' => ['nullable', 'exists:App\Models\Category,id'],
         ];
     }
 }

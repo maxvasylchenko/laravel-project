@@ -9,10 +9,8 @@ use App\Repositories\Contracts\ProductRepositoryContract;
 
 class ProductRepository implements ProductRepositoryContract
 {
-
     public function __construct(protected ImageRepositoryContract $imagesRepository)
     {
-
     }
 
     public function create(CreateProductRequest $request): Product|bool
@@ -23,9 +21,9 @@ class ProductRepository implements ProductRepositoryContract
             $data = collect($request->validated())->except(['categories'])->toArray();
 //            $images = $data['images'] ?? '';
 //            dd($images);
-////            dd($data);
+            ////            dd($data);
             $categories = $request->get('categories', []);
-////            dd($data, $categories);
+            ////            dd($data, $categories);
             $product = Product::create($data);
 //            $product->images()->save($data['images']);
 //            dd('stop');
@@ -33,7 +31,7 @@ class ProductRepository implements ProductRepositoryContract
             $this->imagesRepository->attach(
                 $product,
                 'images',
-                    $data['images'] ?? [],
+                $data['images'] ?? [],
                 $product->slug
             );
 
@@ -50,7 +48,7 @@ class ProductRepository implements ProductRepositoryContract
 
     public function setCategories(Product $product, array $categories = []): void
     {
-        if (!empty($categories)) {
+        if (! empty($categories)) {
             $product->categories()->attach($categories);
         }
     }

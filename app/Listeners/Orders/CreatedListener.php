@@ -6,8 +6,6 @@ use App\Events\OrderCreated;
 use App\Jobs\OrderCreatedJob;
 use App\Notifications\OrderCreatedNotification;
 use App\Services\Contracts\InvoicesServiceContract;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class CreatedListener
 {
@@ -24,7 +22,6 @@ class CreatedListener
     /**
      * Handle the event.
      *
-     * @param  \App\Events\OrderCreated  $event
      * @return void
      */
     public function handle(OrderCreated $event)

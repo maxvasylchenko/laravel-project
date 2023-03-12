@@ -9,4 +9,3 @@ interface InvoicesServiceContract
 {
     public function generate(Order $order): Invoice;
 }
-

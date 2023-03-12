@@ -1,11 +1,10 @@
 <?php
+
 namespace App\Listeners;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class UserEventListener
 {
@@ -13,7 +12,7 @@ class UserEventListener
 
     public function handleLogin($event)
     {
-        collect($this->instances)->each(function($instance) use ($event) {
+        collect($this->instances)->each(function ($instance) use ($event) {
             Cart::instance($instance)->restore($event->user->id);
         });
     }

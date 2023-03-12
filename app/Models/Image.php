@@ -14,7 +14,6 @@ class Image extends Model
 
     protected $guarded = [];
 
-
     public function imageable()
     {
         return $this->morphTo();
@@ -25,14 +24,14 @@ class Image extends Model
 //        dd($this->attributes);
         $this->attributes['path'] = FileStorageService::upload(
             $image,
-                $this->attributes['directory'] ?? null
+            $this->attributes['directory'] ?? null
         );
     }
 
     public function url(): Attribute
     {
         return Attribute::make(
-            get: fn() => Storage::exists($this->attributes['path'])
+            get: fn () => Storage::exists($this->attributes['path'])
                 ? Storage::url($this->attributes['path'])
                 : $this->attributes['path']
         );
@@ -44,5 +43,4 @@ class Image extends Model
 //            fn() => $this->attributes['directory'] . '/' . $this->attributes['path']
 //        );
 //    }
-
 }
