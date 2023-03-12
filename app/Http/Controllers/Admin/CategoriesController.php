@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateCategory;
 use App\Http\Requests\Admin\UpdateCategory;
 use App\Models\Category;
-use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
 {
@@ -19,7 +18,7 @@ class CategoriesController extends Controller
     {
         $categories = Category::with('parent:id,name')->withCount('products')->orderByDesc('id')->paginate(10);
         // $categories = Category::withCount('products')->paginate(10);
-        return view ('admin/categories/index', compact('categories'));
+        return view('admin/categories/index', compact('categories'));
     }
 
     /**
@@ -54,7 +53,7 @@ class CategoriesController extends Controller
      */
     public function edit(Category $category)
     {
-        $this->middleware('permission:' . config('permission.access.categories.edit'));
+        $this->middleware('permission:'.config('permission.access.categories.edit'));
 
         return view('admin/categories/edit', ['categories' => Category::all(), 'category' => $category]);
         //dd($category);
@@ -82,9 +81,10 @@ class CategoriesController extends Controller
      */
     public function destroy(Category $category)
     {
-        $this->middleware('permission:' . config('permission.access.categories.delete'));
+        $this->middleware('permission:'.config('permission.access.categories.delete'));
         // dd($category);
         $category->deleteOrFail();
+
         return redirect()->route('admin.categories.index');
     }
 }

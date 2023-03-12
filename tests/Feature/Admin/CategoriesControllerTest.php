@@ -5,7 +5,6 @@ namespace Tests\Feature\Admin;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CategoriesControllerTest extends TestCase
@@ -77,7 +76,7 @@ class CategoriesControllerTest extends TestCase
         // dd($response);
         $response->assertRedirectToRoute('admin.categories.index');
         $this->assertDatabaseHas('categories', [
-            'name' => $data['name']
+            'name' => $data['name'],
         ]);
     }
 

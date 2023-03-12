@@ -1,15 +1,18 @@
 <?php
+
 namespace App\Models;
+
 use App\Services\FileStorageService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Kyslik\ColumnSortable\Sortable;
+use willvincent\Rateable\Rateable;
 
 class Product extends Model
 {
-    use HasFactory, Sortable;
+    use HasFactory, Sortable, Rateable;
 
     protected $fillable = [
         'title',
@@ -26,7 +29,7 @@ class Product extends Model
     public $sortable = [
         'title',
         'id',
-        'quantity'
+        'quantity',
     ];
 
     public function orders()
@@ -38,6 +41,7 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class);
     }
+
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
@@ -55,7 +59,7 @@ class Product extends Model
 
     public function setThumbnailAttribute($image)
     {
-        if (!empty($this->attributes['thumbnail'])) {
+        if (! empty($this->attributes['thumbnail'])) {
             FileStorageService::remove($this->attributes['thumbnail']);
         }
         $this->attributes['thumbnail'] = FileStorageService::upload(
@@ -63,10 +67,11 @@ class Product extends Model
             strtolower(str_replace(' ', '_', $this->attributes['title']))
         );
     }
+
     public function thumbnailUrl(): Attribute
     {
         return Attribute::make(
-            get: fn() => Storage::exists($this->attributes['thumbnail'])
+            get: fn () => Storage::exists($this->attributes['thumbnail'])
                 ? Storage::url($this->attributes['thumbnail'])
                 : $this->attributes['thumbnail']
         );
@@ -75,7 +80,7 @@ class Product extends Model
     public function slug(): Attribute
     {
         return Attribute::make(
-            get: fn() => strtolower(str_replace(' ', '_', $this->attributes['title']))
+            get: fn () => strtolower(str_replace(' ', '_', $this->attributes['title']))
         );
     }
 
@@ -92,10 +97,24 @@ class Product extends Model
 
     public function price(): Attribute
     {
-        return Attribute::get(fn() => round($this->attributes['price'], 2));
+        return Attribute::get(fn () => round($this->attributes['price'], 2));
     }
+
     public function available(): Attribute
     {
-        return Attribute::get(fn() => $this->attributes['quantity'] > 0);
+        return Attribute::get(fn () => $this->attributes['quantity'] > 0);
+    }
+
+    public function userRate(): Attribute
+    {
+        return Attribute::get(function () {
+//            $rates = $this->ratings()->where(
+            return $this->ratings()->where([
+                ['rateable_id', $this->id],
+                ['user_id', auth()->id()],
+            ])?->first();
+//            dd($rates, $this->attributes['id']);
+//            return $rates->where('user_id', auth()->id())?->first();
+        });
     }
 }

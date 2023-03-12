@@ -44,7 +44,7 @@ class CategoryProductSeeder extends Seeder
 
     protected function addProductsToCategory($category)
     {
-    $products = Product::factory(rand(2, 5))->create()->pluck('id');
-    $category->products()->attach($products);
+        $products = Product::factory(rand(2, 5))->create()->pluck('id');
+        $category->products()->attach($products);
     }
 }

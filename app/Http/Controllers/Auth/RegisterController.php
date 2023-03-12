@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserRequest;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;
@@ -80,8 +80,7 @@ class RegisterController extends Controller
             ? new JsonResponse([], 201)
             : redirect($this->redirectPath());
     }
-    }
-
+}
 
 //    /**
 //     * Create a new user instance after a valid registration.

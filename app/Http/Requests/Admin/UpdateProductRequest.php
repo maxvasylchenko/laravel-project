@@ -28,17 +28,17 @@ class UpdateProductRequest extends FormRequest
         $productsId = $this->route('product')->id;
 
         return [
-//            'title' => ['required', 'string', 'min:2', 'max:255', 'unique:products'],
+            //            'title' => ['required', 'string', 'min:2', 'max:255', 'unique:products'],
             'title' => ['required', 'string', 'min:2', 'max:255', Rule::unique('products', 'title')->ignore($productsId)],
             'description' => ['nullable', 'string'],
-//            'SKU' => ['required', 'string', 'min:1', 'max:35', 'unique:products'],
+            //            'SKU' => ['required', 'string', 'min:1', 'max:35', 'unique:products'],
             'SKU' => ['required', 'string', 'min:1', 'max:35', Rule::unique('products', 'SKU')->ignore($productsId)],
             'price' => ['required', 'numeric', 'min:1'],
             'discount' => ['required', 'numeric', 'min:0', 'max:99'],
             'quantity' => ['required', 'numeric', 'min:0'],
             'categories.*' => ['required', 'numeric', 'exists:App\Models\Category,id'],
             'thumbnail' => ['required', 'image:jpeg,png'],
-            'images.*' => ['image:jpeg,png']
+            'images.*' => ['image:jpeg,png'],
         ];
     }
 }

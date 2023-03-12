@@ -8,6 +8,7 @@ use App\Http\Requests\CreateOrderRequest;
 use App\Models\Order;
 use App\Services\Contracts\PaypalServiceContract;
 use Gloudemans\Shoppingcart\Facades\Cart;
+
 //use Illuminate\Support\Facades\DB;
 //use Srmklive\PayPal\Services\PayPal;
 
@@ -29,9 +30,9 @@ class PaypalController extends Controller
 //        try {
 //            DB::beginTransaction();
 //            $total = Cart::instance('cart')->total();
-////            dd($total);
+        ////            dd($total);
 //            $paypalOrder = $this->createPaymentOrder($total);
-////            dd($paypalOrder);
+        ////            dd($paypalOrder);
 //            $request = array_merge(
 //                $request->validated(),
 //                [
@@ -61,10 +62,9 @@ class PaypalController extends Controller
     {
         Cart::instance('cart')->destroy();
         $order = Order::with(['user', 'transaction', 'products'])->where('vendor_order_id', $vendorOrderId)->firstOrFail();
+
         return view('thankyou/summary', compact('order'));
     }
-
-
 
 //    protected function createPaymentOrder($total): array
 //    {
