@@ -17,17 +17,13 @@ class AuthController extends Controller
      */
     public function __invoke(AuthRequest $request): JsonResponse
     {
-//        dd($request->validated());
+        //        dd($request->validated());
         if (!auth()->attempt($request->validated())) {
             return response()->json(['status' => 'error', 'message' => 'Invalid credentials']);
         }
 
         $permissions = auth()->user()->hasAnyRole('admin', 'editor') ? ['full'] : ['read'];
 
-//        dd(auth()->user());
-//        dd(auth()->user()->tokens()->first()->token);
-//        $token = auth()->user()->tokens()->first()?->token;
-//        dd($token);
         return response()->json([
             'status' => 'success',
             'data' => [

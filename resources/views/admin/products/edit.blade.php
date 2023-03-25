@@ -42,7 +42,7 @@
                             <label for="categories"></label><select name="categories[]"
                                                                     id="categories"
                                                                     class="form-control @error('categories') is-invalid @enderror"
-                                                                    multiple
+                                                                    style="height: 500px"
                             >
                                 @foreach($categories as $category)
                                     <option value="{{ $category['id'] }}"
