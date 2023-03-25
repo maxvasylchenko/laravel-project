@@ -5,10 +5,13 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/sass/app.scss',
                 'resources/js/app.js',
                 'resources/js/images-preview.js',
                 'resources/js/image-actions.js',
+                'resources/sass/app.scss',
+                'resources/js/admin/admin.js',
+                'resources/sass/admin/admin.scss',
+                'resources/js/payments/paypal.js'
             ],
             refresh: true,
         }),

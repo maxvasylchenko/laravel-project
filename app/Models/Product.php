@@ -1,16 +1,15 @@
 <?php
-
 namespace App\Models;
-
 use App\Services\FileStorageService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Kyslik\ColumnSortable\Sortable;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, Sortable;
 
     protected $fillable = [
         'title',
@@ -22,30 +21,48 @@ class Product extends Model
         'SKU',
     ];
 
+    protected $sortableAs = ['followers_count'];
+
+    public $sortable = [
+        'title',
+        'id',
+        'quantity'
+    ];
+
+    public function orders()
+    {
+        return $this->belongstoMany(Order::class);
+    }
+
     public function categories()
     {
         return $this->belongsToMany(Category::class);
     }
-
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
     }
 
+    public function followers()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'wish_list',
+            'product_id',
+            'user_id'
+        );
+    }
+
     public function setThumbnailAttribute($image)
     {
-//        dd($image, $this);
-//        dd(strtolower(str_replace(' ', '_', $this->attributes['title'] )));
         if (!empty($this->attributes['thumbnail'])) {
             FileStorageService::remove($this->attributes['thumbnail']);
         }
-
         $this->attributes['thumbnail'] = FileStorageService::upload(
             $image,
             strtolower(str_replace(' ', '_', $this->attributes['title']))
         );
     }
-
     public function thumbnailUrl(): Attribute
     {
         return Attribute::make(
@@ -69,7 +86,7 @@ class Product extends Model
                 ? $this->attributes['price']
                 : ($this->attributes['price'] - ($this->attributes['price'] * ($this->attributes['discount'] / 100)));
 
-            return $price < 0 ? 1 : round($price, 2); // скорочення до десятичних (10.5232325 -> 10.52)
+            return $price < 0 ? 1 : round($price, 2); //  11,5252252 -> 11,52
         });
     }
 
@@ -77,7 +94,6 @@ class Product extends Model
     {
         return Attribute::get(fn() => round($this->attributes['price'], 2));
     }
-
     public function available(): Attribute
     {
         return Attribute::get(fn() => $this->attributes['quantity'] > 0);
