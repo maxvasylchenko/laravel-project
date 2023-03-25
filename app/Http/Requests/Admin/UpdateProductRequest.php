@@ -14,7 +14,7 @@ class UpdateProductRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->can(config('permission.access.products.edit'));
+        return auth()->user()->can(config('permission.access.products.publish'));
 //        return false;
     }
 
@@ -37,7 +37,7 @@ class UpdateProductRequest extends FormRequest
             'discount' => ['required', 'numeric', 'min:0', 'max:99'],
             'quantity' => ['required', 'numeric', 'min:0'],
             'categories.*' => ['required', 'numeric', 'exists:App\Models\Category,id'],
-            'thumbnail' => ['required', 'image:jpeg,png'],
+            'thumbnail' => ['nullable', 'image:jpeg,png'],
             'images.*' => ['image:jpeg,png'],
         ];
     }
